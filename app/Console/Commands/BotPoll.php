@@ -16,7 +16,7 @@ class BotPoll extends Command
         $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
         $offset = 0;
 
-        $this->info('Бот запущен. Ждём сообщений!');
+        $this->info('Бот запущен. Ждём сообщений');
 
         while (true) {
             try {
