@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Основное приложение (Polling)
+  bot:
+    build: .
+    container_name: steam_bot
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./database:/var/www/html/database
+    networks:
+      - bot_network
+    command: php artisan bot:poll
+
+  # Веб-сервер для вебхуков (дополнительно)
+  web:
+    build: .
+    container_name: steam_bot_web
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./database:/var/www/html/database
+    networks:
+      - bot_network
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  # Планировщик для уведомлений
+  scheduler:
+    build: .
+    container_name: steam_bot_scheduler
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./database:/var/www/html/database
+    networks:
+      - bot_network
+    command: php artisan schedule:work
+
+networks:
+  bot_network:
+    driver: bridge

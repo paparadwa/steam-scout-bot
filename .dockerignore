@@ -1,0 +1,15 @@
+vendor/
+node_modules/
+.git/
+.env
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/
+tests/
+.phpunit.cache
+.gitignore
+README.md
+docker-compose.yml
+Dockerfile
+.dockerignore

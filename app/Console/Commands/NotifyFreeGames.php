@@ -3,18 +3,19 @@
 namespace App\Console\Commands;
 
 use App\Models\Subscriber;
+use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Telegram\Bot\Api;
-use GuzzleHttp\Client;
 
 class NotifyFreeGames extends Command
 {
     protected $signature = 'bot:notify-free';
+
     protected $description = 'Проверка новых бесплатных игр и уведомление подписчиков';
 
     public function handle()
     {
-        $client = new Client();
+        $client = new Client;
         $response = $client->get('https://eve-unputrefiable-monika.ngrok-free.dev/steam/free', [
             'timeout' => 5,
             'verify' => false,
@@ -35,17 +36,18 @@ class NotifyFreeGames extends Command
                     break;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 $newGames[] = $game;
             }
         }
 
         // новые игры — рассылаем
-        if (!empty($newGames)) {
+        if (! empty($newGames)) {
             $subscribers = Subscriber::all();
 
             if ($subscribers->isEmpty()) {
                 $this->info('Нет подписчиков');
+
                 return;
             }
 
@@ -67,15 +69,15 @@ class NotifyFreeGames extends Command
                     ]);
                     $this->info("Уведомление отправлено {$subscriber->chat_id}");
                 } catch (\Exception $e) {
-                    $this->error("Ошибка отправки {$subscriber->chat_id}: " . $e->getMessage());
+                    $this->error("Ошибка отправки {$subscriber->chat_id}: ".$e->getMessage());
                 }
             }
 
             cache(['last_free_games_notified' => $currentGames], now()->addHours(6));
 
-            $this->info("Отправлено уведомлений: " . count($subscribers));
+            $this->info('Отправлено уведомлений: '.count($subscribers));
         } else {
-            $this->info("Новых бесплатных игр нет");
+            $this->info('Новых бесплатных игр нет');
         }
     }
 }

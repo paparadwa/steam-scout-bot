@@ -1,0 +1,11 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "array_syntax": true,
+        "no_unused_imports": true,
+        "ordered_imports": true,
+        "single_quote": true,
+        "trailing_comma_in_multiline": true,
+        "not_operator_with_successor_space": true
+    }
+}

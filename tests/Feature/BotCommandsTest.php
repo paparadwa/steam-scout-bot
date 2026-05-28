@@ -33,7 +33,7 @@ class BotCommandsTest extends TestCase
     {
         $games = [
             ['name' => 'THE WITCHER 3', 'discount' => 70, 'final_price' => '599 ₽', 'url' => 'url'],
-            ['name' => 'Cyberpunk 2077', 'discount' => 50, 'final_price' => '1499 ₽', 'url' => 'url']
+            ['name' => 'Cyberpunk 2077', 'discount' => 50, 'final_price' => '1499 ₽', 'url' => 'url'],
         ];
 
         $searchQuery = 'witcher';
@@ -54,7 +54,7 @@ class BotCommandsTest extends TestCase
     public function test_search_game_not_found()
     {
         $games = [
-            ['name' => 'Cyberpunk 2077', 'discount' => 50, 'final_price' => '1499 ₽', 'url' => 'url']
+            ['name' => 'Cyberpunk 2077', 'discount' => 50, 'final_price' => '1499 ₽', 'url' => 'url'],
         ];
 
         $searchQuery = 'nonexistent';
@@ -78,7 +78,7 @@ class BotCommandsTest extends TestCase
             'discount' => 70,
             'final_price' => '599 ₽',
             'original_price' => '1999 ₽',
-            'url' => 'https://store.steampowered.com/app/witcher3'
+            'url' => 'https://store.steampowered.com/app/witcher3',
         ];
 
         $messageText = "🔍 *Найдена игра:*\n\n";
@@ -119,13 +119,15 @@ class BotCommandsTest extends TestCase
         $count = 0;
 
         foreach ($games as $game) {
-            if ($count >= 10) break;
+            if ($count >= 10) {
+                break;
+            }
             $messageText .= "*{$game['name']}*\n";
             $count++;
         }
 
         if (count($games) > 10) {
-            $messageText .= '_...и ещё ' . (count($games) - 10) . ' игр_';
+            $messageText .= '_...и ещё '.(count($games) - 10).' игр_';
         }
 
         $this->assertStringContainsString('Game 10', $messageText);
@@ -133,12 +135,12 @@ class BotCommandsTest extends TestCase
         $this->assertStringContainsString('...и ещё 5 игр', $messageText);
     }
 
-    //форматирование списка бесплатных игр
+    // форматирование списка бесплатных игр
     public function test_free_games_formatting()
     {
         $games = [
             ['name' => 'Free Game 1', 'final_price' => '0 ₽', 'url' => 'url1'],
-            ['name' => 'Free Game 2', 'final_price' => '0 ₽', 'url' => 'url2']
+            ['name' => 'Free Game 2', 'final_price' => '0 ₽', 'url' => 'url2'],
         ];
 
         $messageText = "🎁 *Бесплатные игры в Steam:*\n\n";
@@ -154,16 +156,16 @@ class BotCommandsTest extends TestCase
         $this->assertStringContainsString('0 ₽', $messageText);
     }
 
-    //Тест: определение новых игр для уведомления
+    // Тест: определение новых игр для уведомления
     public function test_detect_new_free_games()
     {
         $currentGames = [
             ['name' => 'Old Game', 'final_price' => '0 ₽', 'url' => 'old'],
-            ['name' => 'New Game', 'final_price' => '0 ₽', 'url' => 'new']
+            ['name' => 'New Game', 'final_price' => '0 ₽', 'url' => 'new'],
         ];
 
         $previousGames = [
-            ['name' => 'Old Game', 'final_price' => '0 ₽', 'url' => 'old']
+            ['name' => 'Old Game', 'final_price' => '0 ₽', 'url' => 'old'],
         ];
 
         $newGames = [];
@@ -175,7 +177,7 @@ class BotCommandsTest extends TestCase
                     break;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 $newGames[] = $game;
             }
         }
@@ -189,12 +191,12 @@ class BotCommandsTest extends TestCase
     {
         $currentGames = [
             ['name' => 'Game 1', 'final_price' => '0 ₽', 'url' => 'url1'],
-            ['name' => 'Game 2', 'final_price' => '0 ₽', 'url' => 'url2']
+            ['name' => 'Game 2', 'final_price' => '0 ₽', 'url' => 'url2'],
         ];
 
         $previousGames = [
             ['name' => 'Game 1', 'final_price' => '0 ₽', 'url' => 'url1'],
-            ['name' => 'Game 2', 'final_price' => '0 ₽', 'url' => 'url2']
+            ['name' => 'Game 2', 'final_price' => '0 ₽', 'url' => 'url2'],
         ];
 
         $newGames = [];
@@ -206,7 +208,7 @@ class BotCommandsTest extends TestCase
                     break;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 $newGames[] = $game;
             }
         }
@@ -219,7 +221,7 @@ class BotCommandsTest extends TestCase
     {
         $newGames = [
             ['name' => 'New Free Game', 'final_price' => '0 ₽', 'url' => 'https://store.steampowered.com/app/new'],
-            ['name' => 'Another Free Game', 'final_price' => '0 ₽', 'url' => 'https://store.steampowered.com/app/another']
+            ['name' => 'Another Free Game', 'final_price' => '0 ₽', 'url' => 'https://store.steampowered.com/app/another'],
         ];
 
         $message = "🎁 *Новые бесплатные игры в Steam!*\n\n";
@@ -261,7 +263,7 @@ class BotCommandsTest extends TestCase
         $this->assertTrue($isStart);
     }
 
-    //определение команды /help
+    // определение команды /help
     public function test_is_help_command()
     {
         $text = '/help';
@@ -270,8 +272,7 @@ class BotCommandsTest extends TestCase
         $this->assertTrue($isHelp);
     }
 
-
-    //Тест: определение команды /sale
+    // Тест: определение команды /sale
     public function test_is_sale_command()
     {
         $text = '/sale';
@@ -280,8 +281,7 @@ class BotCommandsTest extends TestCase
         $this->assertTrue($isSale);
     }
 
-
-    //Тест: определение команды /free
+    // Тест: определение команды /free
     public function test_is_free_command()
     {
         $text = '/free';
@@ -290,7 +290,7 @@ class BotCommandsTest extends TestCase
         $this->assertTrue($isFree);
     }
 
-    //Тест: определение команды /subscribe
+    // Тест: определение команды /subscribe
     public function test_is_subscribe_command()
     {
         $text = '/subscribe';
@@ -299,7 +299,7 @@ class BotCommandsTest extends TestCase
         $this->assertTrue($isSubscribe);
     }
 
-    //Тест: определение команды /unsubscribe
+    // Тест: определение команды /unsubscribe
     public function test_is_unsubscribe_command()
     {
         $text = '/unsubscribe';
@@ -308,8 +308,7 @@ class BotCommandsTest extends TestCase
         $this->assertTrue($isUnsubscribe);
     }
 
-
-    //Тест: сообщение с пробелами в начале
+    // Тест: сообщение с пробелами в начале
     public function test_command_with_spaces()
     {
         $text = '  /search Witcher';
@@ -319,7 +318,7 @@ class BotCommandsTest extends TestCase
         $this->assertTrue($isSearch);
     }
 
-    //создание нового подписчика
+    // создание нового подписчика
     public function test_subscribe_creates_new_subscriber()
     {
         $chatId = 123456789;
@@ -346,7 +345,7 @@ class BotCommandsTest extends TestCase
         $this->assertDatabaseMissing('subscribers', ['chat_id' => $chatId]);
     }
 
-    //ошибки API
+    // ошибки API
     public function test_sales_api_error_handling()
     {
         // Тестируем, что при ошибке API возвращается правильное сообщение
@@ -361,5 +360,4 @@ class BotCommandsTest extends TestCase
 
         $this->assertStringContainsString('Сервер Steam временно недоступен', $messageText);
     }
-
 }
