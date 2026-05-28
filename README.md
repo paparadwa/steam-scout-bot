@@ -1,3 +1,7 @@
+![PHP](https://img.shields.io/badge/PHP-8.2-blue)
+![Laravel](https://img.shields.io/badge/Laravel-12-red)
+![Docker](https://img.shields.io/badge/Docker-✔-blue)
+
 # Steam Scout Bot
 
 Telegram бот для поиска выгодных предложений в Steam (скидки и бесплатные игры).
@@ -137,6 +141,6 @@ Git Hook (автоматическая проверка перед коммит�
 
 ## 6. Контакты и поддержка
 
-Автор: Тимошков Артём Алексеевич
-Контакты (telegram): @paparadwa
-GitHub Issues: https://github.com/paparadwa/steam-scout-bot/issues
+Автор: Тимошков Артём\
+Контакты (telegram): @paparadwa\
+GitHub Issues: https://github.com/paparadwa/steam-scout-bot/issues\
