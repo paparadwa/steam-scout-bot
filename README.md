@@ -143,4 +143,4 @@ Git Hook (автоматическая проверка перед коммит�
 
 Автор: Тимошков Артём\
 Контакты (telegram): @paparadwa\
-GitHub Issues: https://github.com/paparadwa/steam-scout-bot/issues\
+GitHub Issues: https://github.com/paparadwa/steam-scout-bot/issues
