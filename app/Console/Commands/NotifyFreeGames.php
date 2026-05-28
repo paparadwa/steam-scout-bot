@@ -42,7 +42,7 @@ class NotifyFreeGames extends Command
 
         // новые игры — рассылаем
         if (!empty($newGames)) {
-            $subscribers = Subscriber::all();  // ← как в вашем коде
+            $subscribers = Subscriber::all();
 
             if ($subscribers->isEmpty()) {
                 $this->info('Нет подписчиков');
