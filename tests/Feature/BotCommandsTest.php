@@ -5,9 +5,11 @@ namespace Tests\Unit;
 use App\Models\Subscriber;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+
 class BotCommandsTest extends TestCase
 {
     use RefreshDatabase;
+
     // парсинг команды /search с параметром
     public function test_search_command_parsing()
     {
