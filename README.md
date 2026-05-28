@@ -1,59 +1,141 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Steam Scout Bot
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Telegram бот для поиска выгодных предложений в Steam (скидки и бесплатные игры).
 
-## About Laravel
+## 1. Название и назначение сервиса
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Steam Scout Bot** — это телеграм-бот, который помогает пользователям находить актуальные скидки и бесплатные раздачи в магазине Steam. Бот автоматически отслеживает новые бесплатные игры и уведомляет подписчиков.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Основные функции:**
+- Вывод списка игр со скидками (команда `/sale`)
+- Вывод списка бесплатных игр (команда `/free`)
+- Поиск игры по названию в распродажах (команда `/search`)
+- Подписка на уведомления о новых бесплатных играх (команда `/subscribe`)
+- Автоматическая рассылка уведомлений подписчикам
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 2. Архитектура и зависимости
 
-## Learning Laravel
+### Технологии и фреймворки:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Технология | Назначение |
+|------------|------------|
+| PHP 8.2+ | Язык программирования |
+| Laravel 12 | PHP фреймворк |
+| Telegram Bot SDK | Работа с Telegram API |
+| GuzzleHTTP | HTTP-клиент для запросов к API |
+| SQLite | База данных для хранения подписчиков |
+| Docker | Контейнеризация приложения |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Взаимодействие с внешними API:
 
-## Laravel Sponsors
+| Сервис | Эндпоинт | Описание |
+|--------|----------|----------|
+| Steam API (прокси) | `/steam/sales` | Получение списка игр со скидками |
+| Steam API (прокси) | `/steam/free` | Получение списка бесплатных игр |
+| Telegram Bot API | `api.telegram.org` | Отправка и получение сообщений |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Инструменты разработки:
 
-### Premium Partners
+| Инструмент | Назначение |
+|------------|------------|
+| Laravel Pint | Автоматическое исправление стиля кода (Code Style Fixer) |
+| PHPStan | Статический анализ кода (Линтер) |
+| PHPUnit | Модульное и интеграционное тестирование |
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 3. Способы запуска сервиса
 
-## Contributing
+### Требования:
+- PHP 8.2+
+- Composer
+- Docker (опционально)
+- Git
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Локальный запуск (без Docker):
 
-## Code of Conduct
+```bash
+# 1. Клонирование репозитория
+git clone https://github.com/paparadwa/steam-scout-bot.git
+cd steam-scout-bot
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 2. Установка зависимостей
+composer install
 
-## Security Vulnerabilities
+# 3. Создание .env файла
+cp .env.example .env
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 4. Генерация ключа приложения
+php artisan key:generate
 
-## License
+# 5. Создание базы данных SQLite
+mkdir database && touch database/database.sqlite
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 6. Запуск бота (Long Polling режим)
+php artisan bot:poll
+```
+Запуск через Docker:
+```bash
+# Сборка образов
+docker-compose build
+
+# Запуск всех сервисов
+docker-compose up -d
+
+# Просмотр логов
+docker-compose logs -f bot
+
+# Остановка
+docker-compose down
+```
+Переменные окружения (.env):
+| Переменная | Описание	| Пример |
+|-----------------------|-----------------------|-----------------------|
+| TELEGRAM_BOT_TOKEN | Токен бота от @BotFather | 123456789:ABCdefGHIjklMNO |
+| DB_CONNECTION	| Тип базы данных |	sqlite |
+| DB_DATABASE | Путь к файлу БД	| /var/www/html/database/database.sqlite |
+
+## 4. API документация
+Команды Telegram бота:
+| Команда | Описание |
+| ------------- | --------------------------------------------------- |
+| /start | Приветственное сообщение и список команд |
+| /help	| Подробный список всех команд |
+| /sale	| Топ-10 игр со скидками в Steam |
+| /free	| Топ-10 бесплатных игр в Steam |
+| /search {название} |	Поиск игры по названию в распродажах |
+| /subscribe | Подписаться на уведомления о новых бесплатных играх |
+| /unsubscribe	| Отписаться от уведомлений |
+Внешние API (Steam):
+| Эндпоинт | Метод | Описание |
+| ----------------------------------------------------------- | ------ | ------------------ |
+| https://eve-unputrefiable-monika.ngrok-free.dev/steam/sales | GET	| Список игр со скидками |
+| https://eve-unputrefiable-monika.ngrok-free.dev/steam/free  | GET	| Список бесплатных игр |
+
+## 5. Как тестировать
+Запуск тестов:
+```bash
+# Запуск всех тестов
+php artisan test
+
+# Запуск конкретного тестового файла
+php artisan test --filter BotCommandsTest
+```
+Запуск Code Style Fixer (Laravel Pint):
+```bash
+# Проверка стиля кода
+composer pint:test
+
+# Автоматическое исправление стиля
+composer pint
+```
+Запуск статического анализа (PHPStan):
+```bash
+composer phpstan
+```
+Git Hook (автоматическая проверка перед коммитом):
+При каждом коммите автоматически запускаются тесты. Если какой-то тест падает — коммит блокируется.
+
+## 6. Контакты и поддержка
+
+Автор: Тимошков Артём Алексеевич
+Контакты (telegram): @paparadwa
+GitHub Issues: https://github.com/paparadwa/steam-scout-bot/issues
